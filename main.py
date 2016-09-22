@@ -1,6 +1,7 @@
 import pygame
 import game
 import random
+import math
 
 game.init()
 pygame.init()
@@ -13,7 +14,7 @@ pygame.display.set_caption('A bit Racey')
 
 clock = pygame.time.Clock()
 
-terrain = [[game.blocks[0] if random.randint(0, 5) == 0 else game.blocks[1] for _ in range(20)] for _ in range(20)]
+terrain = [[game.blocks[0] if random.randint(0, 5) == 0 else game.blocks[1] for _ in range(50)] for _ in range(50)]
 player = game.Player(int(len(terrain)/2),int(len(terrain[0])/2), game.Texture([game.Colored_chr(chr(9476), (255, 205, 148)), game.Colored_chr(chr(9532), (255, 205, 148)), game.Colored_chr(chr(9600), (255, 205, 148))]))
 game_font = pygame.font.SysFont("Arial", 20)
 
@@ -32,18 +33,19 @@ def render():
     x_text = 0
     y_text = size[1]
 
-    for y in range(len(terrain)):
-        for x in range(len(terrain[0])):
-
-            render_texture(terrain[y][x].texture, x_text, y_text)
-
-            if y == player.y and x == player.x:
+    for y in range(21):
+        for x in range(21):
+            block = terrain[y-int(player.y/2)][x-int(player.x/2)]
+            render_texture(block.texture, x_text, y_text)
+            if y-(int(player.y)/2) == player.y and x-(int(player.x)/2) == player.x:
                 render_texture(player.texture, x_text, y_text)
-
-            x_text += size[0]*2
+            x_text += size[0] * 2
 
         x_text = 0
         y_text += size[1]
+
+
+
 
 
 crashed = False
